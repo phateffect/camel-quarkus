@@ -75,6 +75,10 @@
                     <artifactId>grpc-netty-shaded</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>io.github.aliyunmq</groupId>
+                    <artifactId>rocketmq-logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>io.netty</groupId>
                     <artifactId>netty-all</artifactId>
                 </exclusion>
@@ -83,6 +87,10 @@
                     <artifactId>animal-sniffer-annotations</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.javamoney.moneta</groupId>
+            <artifactId>moneta-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jboss.logmanager</groupId>

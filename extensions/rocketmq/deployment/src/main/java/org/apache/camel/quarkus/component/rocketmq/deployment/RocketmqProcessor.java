@@ -23,7 +23,6 @@ import com.alibaba.fastjson.serializer.JodaCodec;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.support.moneta.MonetaCodec;
 import com.alibaba.fastjson.util.ASMClassLoader;
-
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -57,6 +56,7 @@ class RocketmqProcessor {
             "org.apache.rocketmq.remoting.protocol.header.QueryConsumerOffsetRequestHeader",
             "org.apache.rocketmq.remoting.protocol.header.QueryConsumerOffsetResponseHeader",
             "org.apache.rocketmq.remoting.protocol.header.SendMessageRequestHeaderV2",
+            "org.apache.rocketmq.remoting.protocol.header.UnregisterClientRequestHeader",
             "org.apache.rocketmq.remoting.protocol.header.UpdateConsumerOffsetRequestHeader",
             "org.apache.rocketmq.remoting.protocol.header.namesrv.GetRouteInfoRequestHeader",
             "org.apache.rocketmq.remoting.protocol.heartbeat.ConsumerData",

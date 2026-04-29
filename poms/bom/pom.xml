@@ -7638,6 +7638,12 @@
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${commons-validator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>dev.langchain4j</groupId>
@@ -8125,6 +8131,20 @@
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-common</artifactId>
                 <version>${rocketmq.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.grpc</groupId>
+                        <artifactId>grpc-netty-shaded</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-all</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>animal-sniffer-annotations</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
@@ -8186,6 +8206,11 @@
                 <groupId>org.influxdb</groupId>
                 <artifactId>influxdb-java</artifactId>
                 <version>${influxdb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javamoney.moneta</groupId>
+                <artifactId>moneta-core</artifactId>
+                <version>${moneta.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>
