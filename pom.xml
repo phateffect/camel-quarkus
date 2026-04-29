@@ -165,6 +165,7 @@
         <reactor-netty.version>${reactor-netty-version}</reactor-netty.version>
         <retrofit.version>3.0.0</retrofit.version><!-- @sync org.kiwiproject:consul-client:${consul-client-version} prop:retrofit.version -->
         <rhino.version>1.7.15.1</rhino.version><!-- Used by Apache FOP, to sync with transitive dependencies -->
+        <rocketmq.version>${rocketmq-version}</rocketmq.version><!-- @sync org.apache.camel:camel-dependencies:${camel.version} prop:rocketmq-version -->
         <rxjava3.version>3.1.8</rxjava3.version><!-- Used by amazon-kinesis-client and infinispan-client-hotrod-jakarta -->
         <saxon.version>${saxon-version}</saxon.version>
         <smooks-bom.version>${smooks-version}</smooks-bom.version>
