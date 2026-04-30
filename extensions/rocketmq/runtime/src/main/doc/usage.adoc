@@ -1,0 +1,1 @@
+Refer to the https://camel.apache.org/components/next/rocketmq-component.html[Camel RocketMQ component documentation] for usage details.

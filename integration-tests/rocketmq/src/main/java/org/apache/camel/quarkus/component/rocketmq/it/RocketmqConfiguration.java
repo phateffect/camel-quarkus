@@ -14,17 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.quarkus.component.rocketmq.runtime;
+package org.apache.camel.quarkus.component.rocketmq.it;
 
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import io.quarkus.runtime.annotations.Recorder;
+import jakarta.inject.Named;
+import org.apache.camel.component.rocketmq.RocketMQComponent;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Recorder
-public class CamelRocketmqRecorder {
+public class RocketmqConfiguration {
 
-    public void configureFastJson() {
-        ParserConfig.getGlobalInstance().setAsmEnable(false);
-        SerializeConfig.getGlobalInstance().setAsmEnable(false);
+    @ConfigProperty(name = "rocketmq.namesrv.addr")
+    String namesrvAddr;
+
+    @Named
+    RocketMQComponent rocketmq() {
+        RocketMQComponent component = new RocketMQComponent();
+        component.setNamesrvAddr(namesrvAddr);
+        return component;
     }
 }

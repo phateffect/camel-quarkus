@@ -165,6 +165,7 @@
         <reactor-netty.version>${reactor-netty-version}</reactor-netty.version>
         <retrofit.version>3.0.0</retrofit.version><!-- @sync org.kiwiproject:consul-client:${consul-client-version} prop:retrofit.version -->
         <rhino.version>1.7.15.1</rhino.version><!-- Used by Apache FOP, to sync with transitive dependencies -->
+        <rocketmq.version>5.3.2</rocketmq.version><!-- @sync org.apache.camel:camel-rocketmq:${camel.version} dep:org.apache.rocketmq:rocketmq-client -->
         <rxjava3.version>3.1.8</rxjava3.version><!-- Used by amazon-kinesis-client and infinispan-client-hotrod-jakarta -->
         <saxon.version>${saxon-version}</saxon.version>
         <smooks-bom.version>${smooks-version}</smooks-bom.version>
@@ -281,6 +282,7 @@
         <qdrant.container.image>mirror.gcr.io/qdrant/qdrant:v1.16.0-unprivileged</qdrant.container.image>
         <rabbitmq.container.image>mirror.gcr.io/rabbitmq:4.2.4-management-alpine</rabbitmq.container.image>
         <redis.container.image>mirror.gcr.io/redis:7.4.0-alpine</redis.container.image>
+        <rocketmq.container.image>apache/rocketmq:5.3.2</rocketmq.container.image>
         <servicebus-emulator.container.image>mcr.microsoft.com/azure-messaging/servicebus-emulator:latest</servicebus-emulator.container.image>
         <smb.container.image>quay.io/jamesnetherton/camel-smb-test-server:1.0.0</smb.container.image>
         <solr.container.image>mirror.gcr.io/solr:9.9.0-slim</solr.container.image>

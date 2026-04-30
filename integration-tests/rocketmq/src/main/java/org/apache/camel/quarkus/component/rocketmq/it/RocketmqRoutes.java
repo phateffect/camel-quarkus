@@ -14,17 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.quarkus.component.rocketmq.runtime;
+package org.apache.camel.quarkus.component.rocketmq.it;
 
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import io.quarkus.runtime.annotations.Recorder;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.apache.camel.builder.RouteBuilder;
 
-@Recorder
-public class CamelRocketmqRecorder {
+@ApplicationScoped
+public class RocketmqRoutes extends RouteBuilder {
 
-    public void configureFastJson() {
-        ParserConfig.getGlobalInstance().setAsmEnable(false);
-        SerializeConfig.getGlobalInstance().setAsmEnable(false);
+    @Inject
+    RocketmqResource rocketmqResource;
+
+    @Override
+    public void configure() {
+        from("rocketmq:camel-test?consumerGroup=camel-test-consumer-group")
+                .routeId("rocketmq-test")
+                .bean(rocketmqResource, "storeMessage");
     }
 }
