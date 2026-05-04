@@ -16,6 +16,7 @@
 #
 
 # Association of test categories and integration test modules. Used by GitHub workflows. Keep sorted alphabetically.
+# To periodically rebalance groups run: mvn org.apache.camel.quarkus:camel-quarkus-maven-plugin:rebalance-test-groups -Dcq.ciRunId=<GitHub Workflow Run ID> -N
 group-01:
   - caffeine
   - qdrant
@@ -57,6 +58,7 @@ group-02:
 group-03:
   - bean-validator
   - box
+  - elasticsearch
   - elasticsearch-rest-client
   - foundation-grouped
   - freemarker
