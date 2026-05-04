@@ -19,18 +19,18 @@ package org.apache.camel.quarkus.component.rocketmq.deployment;
 import java.util.List;
 
 import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.JodaCodec;
 import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.support.moneta.MonetaCodec;
 import com.alibaba.fastjson.util.ASMClassLoader;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.NativeImageAllowIncompleteClasspathBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.NativeImageResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedPackageBuildItem;
 import org.apache.camel.quarkus.component.rocketmq.runtime.CamelRocketmqRecorder;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 
@@ -95,6 +95,11 @@ class RocketmqProcessor {
     }
 
     @BuildStep
+    NativeImageAllowIncompleteClasspathBuildItem allowIncompleteClasspath() {
+        return new NativeImageAllowIncompleteClasspathBuildItem(FEATURE);
+    }
+
+    @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     void configureFastJson(CamelRocketmqRecorder recorder) {
         recorder.configureFastJson();
@@ -123,14 +128,22 @@ class RocketmqProcessor {
     }
 
     @BuildStep
-    void registerRuntimeInitializedClasses(BuildProducer<RuntimeInitializedClassBuildItem> runtimeInitializedClasses) {
+    void registerRuntimeInitializedClasses(BuildProducer<RuntimeInitializedClassBuildItem> runtimeInitializedClasses,
+            BuildProducer<RuntimeInitializedPackageBuildItem> runtimeInitializedPackages) {
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(
                 org.apache.camel.component.rocketmq.RocketMQConsumer.class.getName()));
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(DefaultMQPushConsumer.class.getName()));
-        runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(JodaCodec.class.getName()));
-        runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(MonetaCodec.class.getName()));
+
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(SerializeConfig.class.getName()));
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(ParserConfig.class.getName()));
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(ASMClassLoader.class.getName()));
+
+        // RocketMQ logging framework uses a shaded logback with AsyncAppender that creates threads.
+        // Ensure all RocketMQ classes are runtime-initialized to prevent threads in the image heap.
+        runtimeInitializedPackages.produce(new RuntimeInitializedPackageBuildItem("org.apache.rocketmq"));
+
+        // Fastjson references optional types (e.g., javax.money.Monetary) that may not be on the classpath.
+        // Runtime-initialize the package to avoid build-time linkage errors.
+        runtimeInitializedPackages.produce(new RuntimeInitializedPackageBuildItem("com.alibaba.fastjson"));
     }
 }

@@ -54,7 +54,7 @@ public class RocketmqTestResource implements QuarkusTestResourceLifecycleManager
 
         namesrvContainer.start();
 
-        String brokerConf = "brokerIP1=127.0.0.1\nbrokerName=broker-a\nbrokerClusterName=DefaultCluster\n";
+        String brokerConf = "brokerIP1=127.0.0.1\nbrokerName=broker-a\nbrokerClusterName=DefaultCluster\nautoCreateTopicEnable=true\n";
 
         brokerContainer = new FixedHostPortGenericContainer<>(ROCKETMQ_IMAGE)
                 .withNetwork(network)
@@ -68,15 +68,31 @@ public class RocketmqTestResource implements QuarkusTestResourceLifecycleManager
 
         brokerContainer.start();
 
-        try {
-            org.testcontainers.containers.Container.ExecResult result = brokerContainer.execInContainer(
-                    "sh", "mqadmin", "updateTopic", "-n", "namesrv:9876", "-t", "camel-test", "-c", "DefaultCluster");
-            LOG.info("Topic creation stdout: {}", result.getStdout());
-            if (result.getExitCode() != 0) {
-                LOG.warn("Topic creation stderr: {}", result.getStderr());
+        int retries = 10;
+        boolean topicCreated = false;
+        for (int i = 0; i < retries && !topicCreated; i++) {
+            try {
+                org.testcontainers.containers.Container.ExecResult result = brokerContainer.execInContainer(
+                        "sh", "mqadmin", "updateTopic", "-n", "namesrv:9876", "-t", "camel-test", "-c", "DefaultCluster");
+                LOG.info("Topic creation stdout: {}", result.getStdout());
+                if (result.getExitCode() == 0 && result.getStdout().contains("success")) {
+                    topicCreated = true;
+                } else {
+                    LOG.warn("Topic creation attempt {} failed: {}", i + 1, result.getStderr());
+                    Thread.sleep(2000);
+                }
+            } catch (Exception e) {
+                LOG.warn("Topic creation attempt {} failed", i + 1, e);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             }
-        } catch (Exception e) {
-            LOG.warn("Could not create topic via mqadmin", e);
+        }
+        if (!topicCreated) {
+            LOG.warn("Could not create topic via mqadmin after {} attempts, relying on auto topic creation", retries);
         }
 
         Map<String, String> properties = new HashMap<>();
