@@ -16,31 +16,38 @@
  */
 package org.apache.camel.quarkus.component.rocketmq.it;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import java.util.concurrent.TimeUnit;
 
-import org.junit.jupiter.api.Assertions;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import org.junit.jupiter.api.Test;
 
+import static io.restassured.RestAssured.given;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@QuarkusTestResource(RocketmqTestResource.class)
 @QuarkusTest
 class RocketmqTest {
 
     @Test
-    void test() {
-        final String msg = java.util.UUID.randomUUID().toString().replace("-", "");
-        RestAssured.given()
-                .contentType(ContentType.TEXT)
-                .body(msg)
-                .post("/rocketmq/post")
-                .then()
-                .statusCode(201);
+    void produceConsumeRoundTripShouldSucceed() {
+        String message = "Hello Camel Quarkus RocketMQ";
 
-        Assertions.fail("Add some assertions to " + getClass().getName());
+        Header header = new Header("sendToEndpointUri",
+                "rocketmq:camel-test?producerGroup=camel-test-producer-group");
+        given().when().header(header).contentType(ContentType.TEXT).body(message).post("/rocketmq/send").then()
+                .statusCode(204);
 
-        RestAssured.get("/rocketmq/get")
-                .then()
-                .statusCode(200);
+        await().atMost(30L, TimeUnit.SECONDS).until(() -> {
+            return given().get("/rocketmq/messages/rocketmq-test").path("size()").equals(1);
+        });
+
+        String[] messages = given().get("/rocketmq/messages/rocketmq-test").then().statusCode(200).extract()
+                .as(String[].class);
+        assertEquals(1, messages.length);
+        assertEquals(message, messages[0]);
     }
-
 }
