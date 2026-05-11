@@ -7537,31 +7537,6 @@
                 <version>${json-schema-validator.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-client</artifactId>
-                <version>${rocketmq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-acl</artifactId>
-                <version>${rocketmq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-remoting</artifactId>
-                <version>${rocketmq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-common</artifactId>
-                <version>${rocketmq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-tools</artifactId>
-                <version>${rocketmq.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.orbitz.consul</groupId>
                 <artifactId>consul-client</artifactId>
                 <version>${consul-client.version}</version>
@@ -7663,6 +7638,12 @@
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${commons-validator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>dev.langchain4j</groupId>
@@ -8135,6 +8116,49 @@
                         <artifactId>commons-logging</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-acl</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-common</artifactId>
+                <version>${rocketmq.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.grpc</groupId>
+                        <artifactId>grpc-netty-shaded</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-all</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>animal-sniffer-annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.lz4</groupId>
+                        <artifactId>lz4-java</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-remoting</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-tools</artifactId>
+                <version>${rocketmq.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
